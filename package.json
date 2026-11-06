@@ -2,7 +2,7 @@
   "name": "note-app",
   "productName": "便签",
   "private": true,
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "极简便签，支持图片与灵活的时间/地点提醒",
   "author": "h2061",
   "type": "module",

@@ -27,6 +27,17 @@
             android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- 前台守护：防止用户划掉任务后应用进入 force-stopped 状态，
+             导致提醒闹钟的广播被系统拦截（表现为划掉后提醒静默） -->
+        <service
+            android:name=".KeepAliveService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="保持进程存活以准点触发用户设置的时间提醒闹钟" />
+        </service>
     </application>
 
     <!-- Permissions -->
@@ -46,4 +57,6 @@
     <!-- 常驻前台服务，降低被系统清理的概率 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Android 14+ 要求为 specialUse 类型的前台服务单独声明权限 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 </manifest>

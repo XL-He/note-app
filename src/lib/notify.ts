@@ -124,7 +124,7 @@ export function notifySystem(title: string, body: string, tag: string) {
           channelId: CHANNEL_ID,
           smallIcon: 'ic_stat_icon',
           iconColor: '#2f6b4f',
-          // 立即触发
+          // 立即触发。8.x 默认就是精确闹钟，无需（也没有）exact 参数
           schedule: { at: new Date(Date.now() + 50) },
           extra: { tag },
         },
@@ -228,6 +228,7 @@ export async function syncNativeReminders(): Promise<{ scheduled: number }> {
         channelId: CHANNEL_ID,
         smallIcon: 'ic_stat_icon',
         iconColor: '#2f6b4f',
+        // 8.x 默认就是精确闹钟；若系统未授予精确闹钟权限会自动降级并给出 warning
         schedule: { at: new Date(at) },
         extra: { reminderId: r.id, noteId: r.noteId },
       })
@@ -236,8 +237,14 @@ export async function syncNativeReminders(): Promise<{ scheduled: number }> {
 
   if (notifications.length) {
     try {
-      await LocalNotifications.schedule({ notifications })
-    } catch {
+      const result = await LocalNotifications.schedule({ notifications })
+      // 8.x：精确闹钟是默认行为，但若系统未授予精确闹钟权限会自动降级为非精确，
+      // 并在 warning 里给出原因——真机排查「提醒不响」时先看这里
+      if (result.warning) {
+        console.warn('[notify] 提醒排程降级为非精确闹钟:', JSON.stringify(result.warning))
+      }
+    } catch (e) {
+      console.warn('[notify] 提醒排程失败:', e)
       return { scheduled: 0 }
     }
   }
