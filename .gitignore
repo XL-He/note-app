@@ -1,0 +1,43 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# 安卓构建工具链（JDK + SDK + Gradle 缓存，约 2GB）
+# 全部在项目内，删掉这个目录就等于卸载安卓构建环境
+.android-toolchain
+# 安卓构建产物
+android/.gradle
+android/build
+android/app/build
+android/local.properties
+release-android
+# 各种打包输出目录
+pkg
+pkg-*
+dist-pkg
+release
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Capacitor 生成的（cap sync 会重建）
+android/app/src/main/assets/public/
+android/capacitor-cordova-android-plugins/

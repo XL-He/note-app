@@ -1,0 +1,88 @@
+{
+  "name": "note-app",
+  "productName": "便签",
+  "private": true,
+  "version": "0.3.3",
+  "description": "极简便签，支持图片与灵活的时间/地点提醒",
+  "author": "h2061",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "start": "npm run build && vite preview",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "icon": "node scripts/gen-icon.mjs",
+    "electron:dev": "node scripts/dev-electron.mjs",
+    "electron:build": "npm run build && electron-builder --win",
+    "check:schedule": "node --experimental-strip-types scripts/check-schedule.ts",
+    "check:webdav": "node --import tsx scripts/check-webdav.ts",
+    "check:sync": "node --import tsx scripts/check-sync.mjs --both",
+    "check": "npm run check:schedule && npm run check:webdav && npm run check:sync"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/cli": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/local-notifications": "^8.3.1",
+    "@tailwindcss/vite": "^4.3.4",
+    "@tiptap/extension-image": "^3.32.2",
+    "@tiptap/extension-placeholder": "^3.32.2",
+    "@tiptap/pm": "^3.32.2",
+    "@tiptap/react": "^3.32.2",
+    "@tiptap/starter-kit": "^3.32.2",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "dexie": "^4.4.7",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "fake-indexeddb": "^6.2.7",
+    "lucide-react": "^1.68.0",
+    "oxlint": "^1.89.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.4",
+    "tsx": "^4.23.15",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.5"
+  },
+  "build": {
+    "appId": "com.sticky.notes",
+    "productName": "便签",
+    "directories": {
+      "output": "dist-pkg",
+      "buildResources": "electron/assets"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "!electron/assets/icon-16.png",
+      "!electron/assets/icon-32.png",
+      "!electron/assets/icon-64.png",
+      "!electron/assets/icon-512.png"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "electron/assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "便签"
+    }
+  }
+}

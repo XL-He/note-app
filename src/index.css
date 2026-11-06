@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --paper: #f7f7f4;
+  --card: #ffffff;
+  --ink: #1f2320;
+  --muted: #6b7168;
+  --line: #e5e5df;
+  --accent: #2f6b4f;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+}
+
+/**
+ * 全面屏适配：安卓/iOS 的状态栏、刘海、底部手势条会压住内容。
+ * env() 在桌面浏览器里恒为 0，所以桌面端不受影响。
+ */
+#root {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  background: var(--paper);
+}
+
+/* 输入框在移动端小于 16px 会触发自动放大，这里统一兜住 */
+@media (max-width: 768px) {
+  input,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #d8d8d2;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- 编辑器 ---------- */
+
+.ProseMirror {
+  outline: none;
+  min-height: 320px;
+  line-height: 1.75;
+  font-size: 15px;
+  color: var(--ink);
+  word-break: break-word;
+}
+
+.ProseMirror p {
+  margin: 0 0 0.6em;
+}
+
+.ProseMirror > p:last-child {
+  margin-bottom: 0;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.35em;
+  margin: 0 0 0.6em;
+}
+
+.ProseMirror li {
+  margin: 0.15em 0;
+}
+
+.ProseMirror li p {
+  margin: 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 3px solid var(--line);
+  padding-left: 12px;
+  color: var(--muted);
+  margin: 0 0 0.6em;
+}
+
+.ProseMirror code {
+  background: #f0f0ec;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.ProseMirror pre {
+  background: #f0f0ec;
+  padding: 12px 14px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  border-radius: 8px;
+  display: block;
+  margin: 8px 0;
+}
+
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #a9aea6;
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
