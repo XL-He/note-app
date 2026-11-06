@@ -41,3 +41,4 @@ release
 # Capacitor 生成的（cap sync 会重建）
 android/app/src/main/assets/public/
 android/capacitor-cordova-android-plugins/
+android/capacitor-cordova-android-plugins-old/
