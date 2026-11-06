@@ -69,6 +69,30 @@ export function notifySupported(): boolean {
   return typeof window !== 'undefined' && 'Notification' in window
 }
 
+/**
+ * 查询当前通知权限（只查询，不弹窗）。
+ *
+ * ⚠️ 安卓 WebView 里没有 window.Notification 这个全局对象，
+ * 任何裸访问 Notification.permission 的代码在手机上都会直接抛
+ * ReferenceError 并把 React 整棵树打崩（白屏）。
+ * 所以统一从这里查：原生走插件，网页/Electron 走浏览器 API。
+ */
+export async function queryNotifyPermission(): Promise<'granted' | 'denied' | 'default'> {
+  if (isNative()) {
+    try {
+      const cur = await LocalNotifications.checkPermissions()
+      // 原生返回 'granted' | 'denied' | 'prompt'，把 prompt 归一成 default
+      return cur.display === 'granted' ? 'granted' : cur.display === 'denied' ? 'denied' : 'default'
+    } catch {
+      return 'denied'
+    }
+  }
+  if (typeof window !== 'undefined' && 'Notification' in window) {
+    return Notification.permission
+  }
+  return 'denied'
+}
+
 export async function ensureNotifyPermission(): Promise<'granted' | 'denied' | 'default'> {
   if (isNative()) {
     try {

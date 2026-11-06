@@ -11,7 +11,7 @@ import {
   nextFireAt,
   presetTrigger,
 } from '../lib/schedule'
-import { ensureNotifyPermission, notifySupported } from '../lib/notify'
+import { ensureNotifyPermission, notifySupported, queryNotifyPermission } from '../lib/notify'
 
 interface Props {
   note: Note
@@ -53,7 +53,9 @@ export default function ReminderPanel({ note, open, onClose, onChanged }: Props)
   useEffect(() => {
     if (!open) return
     void listByNote(note.id).then(setItems)
-    if (notifySupported()) setPerm(Notification.permission)
+    // 不能裸读 Notification.permission：安卓 WebView 没有这个全局对象，
+    // 之前在这里裸读导致手机端一打开面板就 ReferenceError 白屏
+    void queryNotifyPermission().then(setPerm)
   }, [open, note.id])
 
   const draft = useMemo<TimeTrigger>(() => {
